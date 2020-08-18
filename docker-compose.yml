@@ -1,0 +1,62 @@
+version: "3.7"
+services:
+  pg_master:
+    build: ./postgres/master
+    ports:
+      - "5445:5432"
+    volumes:
+      - mdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123qwe
+      - POSTGRES_DB=covid
+      - PG_REP_USER=postgres
+      - PG_REP_PASSWORD=123qwerep
+    networks:
+      - bridge-docker
+    restart: always
+  pg_slave:
+    build: ./postgres/slave
+    ports:
+      - "5446:5432"
+    volumes:
+      - sdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123qwe
+      - POSTGRES_DB=covid
+      - PG_REP_USER=postgresrep
+      - PG_REP_PASSWORD=123qwerep
+    networks:
+      - bridge-docker
+    restart: always
+    depends_on:
+      - pg_master
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /app
+    ports:
+      - 3002:3002
+    depends_on:
+      - pg_slave
+    networks:
+      - bridge-docker
+  redis:
+    image: redis:3.2-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis:/data
+    networks:
+      - bridge-docker
+volumes:
+  mdata:
+  sdata:
+  redis:
+networks:
+  bridge-docker:
+    external:
+      name: bridge-docker
