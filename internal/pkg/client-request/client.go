@@ -12,7 +12,6 @@ import (
 	"crawlerdatacovid/internal/app/model"
 )
 
-
 type CustomJar struct {
 	jar map[string][]*http.Cookie
 }
@@ -64,9 +63,9 @@ func GetData() ([]model.DataCovid, error) {
 	req.Header.Set("Accept", "application/json, text/plain, */*")
 	req.Header.Set("Accept-Language", "vi-VN,vi;q=0.9,en-US;q=0.8,en;q=0.7")
 	req.Header.Set("key", "0e8eea40d9638a9175b692ed01ae6add4de0ed439333dd052f2803360f2bcee6")
-	req.Header.Set("key0", "3fcef289b72ab8a9ce57197c0e4c8897b547d4283c185ab0f55f99db36103110")
+	req.Header.Set("key0", "aea38cdcb4d780538ea36b55e1e9b83d4617324951a0364595e1e9b472ff9bc5")
 	req.Header.Set("origin", "https://covidmaps.danang.gov.vn")
-	req.Header.Set("timestamp", "1597739294891")
+	req.Header.Set("timestamp", "1597743495790")
 	req.Header.Set("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36")
 
 	client := &http.Client{}
@@ -87,4 +86,3 @@ func GetData() ([]model.DataCovid, error) {
 	log.Print(v)
 	return v, err
 }
-

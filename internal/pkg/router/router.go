@@ -22,16 +22,26 @@ func NewApp() *App {
 	return &App{e, db}
 }
 
-
 func (a *App) Run() {
 	a.configMiddleware()
 	data, _ := client_request.GetData()
-	_, err := a.db.Model(model.DataCovid{}).Insert(data)
-	if err != nil {
-		print (err)
+	var divided [][]model.DataCovid
+	chunkSize := 1000
+	for i := 0; i < len(data); i += chunkSize {
+		end := i + chunkSize
+		if end > len(data) {
+			end = len(data)
+		}
+		divided = append(divided, data[i:end])
 	}
+	for i := range divided {
+		_, err := a.db.Model(&divided[i]).Insert()
+		if err != nil {
+			print(err)
+		}
+	}
+	print("success")
 }
-
 
 func (a *App) configMiddleware() {
 	a.echo.Use(middleware.CORS())

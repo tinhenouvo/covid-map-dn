@@ -14,7 +14,7 @@ import (
 
 //Get connection
 func GetConnect() *pg.DB {
-	databaseURI := utils.Getenv("POSTGRES_CONN", "postgresql://postgres:123qwe@localhost:5432/covid?sslmode=disable")
+	databaseURI := utils.Getenv("POSTGRES_CONN", "postgresql://postgres:password@localhost:5432/covid?sslmode=disable")
 	if config.ZookeeperValue != nil && config.ZookeeperValue.DatabaseURL != "" {
 		databaseURI = config.ZookeeperValue.DatabaseURL
 	}
