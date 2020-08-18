@@ -35,7 +35,8 @@ func (a *App) Run() {
 		divided = append(divided, data[i:end])
 	}
 	for i := range divided {
-		_, err := a.db.Model(&divided[i]).Insert()
+		_, err := a.db.Model(&divided[i]).OnConflict("(id) DO UPDATE").
+			Set("title = EXCLUDED.title").Insert()
 		if err != nil {
 			print(err)
 		}
